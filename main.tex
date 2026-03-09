@@ -1,0 +1,330 @@
+%% ============================================================
+%%  CSCI 4922/5922 — Lab Assignment 3 Report Template
+%%  Neural Networks and Deep Learning, Spring 2026
+%% ============================================================
+
+\documentclass[11pt]{article}
+
+% ── Packages ────────────────────────────────────────────────
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath, amssymb}
+\usepackage{booktabs}        % professional tables
+\usepackage{graphicx}        % figures
+\usepackage{hyperref}        % clickable references
+\usepackage{caption}
+\usepackage{subcaption}      % subfigures
+\usepackage{enumitem}        % tighter lists
+\usepackage{titlesec}        % section formatting
+\usepackage{parskip}         % space between paragraphs
+\usepackage{listings}        % code in appendix
+\usepackage{xcolor}
+\usepackage{microtype}       % better typography
+
+% ── Code listing style ──────────────────────────────────────
+\lstset{
+  language=Python,
+  basicstyle=\ttfamily\footnotesize,
+  keywordstyle=\color{blue},
+  commentstyle=\color{gray},
+  stringstyle=\color{orange!80!black},
+  breaklines=true,
+  frame=single,
+  numbers=left,
+  numberstyle=\tiny\color{gray},
+  xleftmargin=1.5em,
+}
+
+% ── Convenience command for placeholders ────────────────────
+\newcommand{\todo}[1]{\textcolor{red}{\textbf{[TODO: #1]}}}
+
+% ── Title block ─────────────────────────────────────────────
+\title{
+  \textbf{Lab Assignment 3: Visual Question Answering Tasks}\\
+  \large CSCI \todo{4922 or 5922} — Neural Networks and Deep Learning
+}
+\author{
+  \todo{Your Full Name} \\
+}
+\date{}
+
+% ════════════════════════════════════════════════════════════
+\begin{document}
+\maketitle
+
+% ════════════════════════════════════════════════════════════
+\section{Custom Multi-Modal Architectures (Challenges 1 \& 2)}
+% Rubric: 17.5 points total
+% ════════════════════════════════════════════════════════════
+
+% ── 1.1 Methods ─────────────────────────────────────────────
+\subsection{Methods}
+
+\subsubsection{Dataset Preprocessing}
+
+\todo{
+  Describe your preprocessing pipeline in full detail. Cover at minimum:
+  (1) image preprocessing (resize dimensions, normalization statistics),
+  (2) text preprocessing / tokenization scheme,
+  (3) how you handle the binary label for Task 1 and the 10 human answers
+      for Task 2 (e.g., majority vote, all-answers supervision, etc.),
+  (4) how you sampled up to 10,000 training examples from the full 20,523.
+}
+
+\subsubsection{Experiment Design — Task 1: Answerability Classification}
+
+\todo{
+  Clearly state: (1) the hypothesis being tested, (2) the experimental
+  variable (what changes between conditions), (3) everything held constant,
+  and (4) how you will evaluate the outcome (metric, dataset split).
+}
+
+\subsubsection{Experiment Design — Task 2: Answer Generation}
+% Same rubric criteria as above for the generation task.
+
+\todo{
+  Same structure as 1.1.2 but for the text generation task. State the
+  hypothesis, variable, controls, and evaluation metric.
+}
+
+\subsubsection{Final Architecture Descriptions}
+
+\paragraph{Challenge 1 — Classification Architecture.}
+\todo{
+  Describe the layers, attention operations, input/output dimensions,
+  activation functions, and any other notable design choices of your
+  final Challenge 1 model.
+}
+
+\paragraph{Challenge 2 — Answer Generation Architecture.}
+\todo{
+  Same as above for your Challenge 2 model.
+}
+
+% ── 1.2 Results ─────────────────────────────────────────────
+\subsection{Results}
+% Rubric: "Well-formatted results are provided for each experiment" (5 pts)
+
+\subsubsection{Experiment Results — Task 1: Answerability Classification}
+
+\todo{
+  Report validation accuracy (or other chosen metric) for each experimental
+  condition. Use tables, figures or whatever you believe will be the best way to communicate your results.
+}
+
+\todo{This table is just an example, please add your own metrics to report and add them to the table.}
+\begin{table}[h]
+  \centering
+  \caption{Task 1 experiment results: \todo{experiment name, e.g., attention type comparison}.}
+  \label{tab:exp1_cls}
+  \begin{tabular}{lcc}
+    \toprule
+    \textbf{Condition} & \textbf{Val Accuracy (\%)} & \textbf{Notes} \\
+    \midrule
+    \todo{Condition A}  & \todo{XX.X}  & \\
+    \todo{Condition B}  & \todo{XX.X}  & \\
+    \todo{Condition C}  & \todo{XX.X}  & \\
+    \bottomrule
+  \end{tabular}
+\end{table}
+
+\subsubsection{Experiment Results — Task 2: Answer Generation}
+
+\todo{
+  Report validation accuracy (human-answer metric) for each experimental
+  condition. Use tables, figures or whatever you believe will be the best way to communicate your results.
+}
+
+\begin{table}[h]
+  \centering
+  \caption{Task 2 experiment results: \todo{This is just a placeholder table. Please adjust the results to whatever you feel is best to articulate what you found.}.}
+  \label{tab:exp1_gen}
+  \begin{tabular}{lcc}
+    \toprule
+    \textbf{Condition} & \textbf{Val Answer Accuracy} & \textbf{Notes} \\
+    \midrule
+    \todo{Condition A}  & \todo{X.XXX}  & \\
+    \todo{Condition B}  & \todo{X.XXX}  & \\
+    \todo{Condition C}  & \todo{X.XXX}  & \\
+    \bottomrule
+  \end{tabular}
+\end{table}
+
+% ── 1.3 Analysis ────────────────────────────────────────────
+\subsection{Analysis}
+
+\subsubsection{Analysis — Task 1 Experiment}
+\todo{
+  Interpret the results from Table~\ref{tab:exp1_cls}. Which condition
+  performed best and why? Were there surprising outcomes? What would you
+  do differently with more compute?
+}
+
+\subsubsection{Analysis — Task 2 Experiment}
+\todo{
+  Same depth of analysis for Table~\ref{tab:exp1_gen}.
+}
+
+
+% ════════════════════════════════════════════════════════════
+\section{Foundation Model Features — CLIP (Challenges 3 \& 4)}
+% Rubric: 12.5 points total
+% ════════════════════════════════════════════════════════════
+
+\subsection{Methods}
+
+\iffalse
+\subsubsection{Feature Loading and Preprocessing}
+
+\todo{
+  Describe how you loaded the CLIP features (512-d image and text vectors),
+  any normalization or projection applied before feeding into your model,
+  and how you enforced the ≤10,000 training sample limit.
+}
+\fi
+
+\subsubsection{Experiment Design — Task 1: Answerability Classification (CLIP)}
+
+\todo{
+  State hypothesis, experimental variable, controls, and evaluation
+  metric for your CLIP-based classification experiment.
+}
+
+\subsubsection{Experiment Design — Task 2: Answer Generation (CLIP)}
+
+\todo{
+  Same structure for the CLIP-based answer generation experiment.
+}
+
+\subsubsection{Final Architecture Descriptions}
+
+\paragraph{Challenge 3 — CLIP Classification Architecture.}
+\todo{Describe the architecture built on top of CLIP features.}
+
+\paragraph{Challenge 4 — CLIP Answer Generation Architecture.}
+\todo{Describe the architecture built on top of CLIP features.}
+
+\subsection{Results}
+
+\subsubsection{Experiment Results — Task 1 (CLIP)}
+
+\begin{table}[h]
+  \centering
+  \caption{Task 1 CLIP experiment results: \todo{This is just a placeholder table. Please adjust the results to whatever you feel is best to articulate what you found.}.}
+  \label{tab:exp2_cls}
+  \begin{tabular}{lcc}
+    \toprule
+    \textbf{Condition} & \textbf{Val Accuracy (\%)} & \textbf{Notes} \\
+    \midrule
+    \todo{Condition A}  & \todo{XX.X}  & \\
+    \todo{Condition B}  & \todo{XX.X}  & \\
+    \bottomrule
+  \end{tabular}
+\end{table}
+
+\subsubsection{Experiment Results — Task 2 (CLIP)}
+
+\begin{table}[h]
+  \centering
+  \caption{Task 2 CLIP experiment results: \todo{This is just a placeholder table. Please adjust the results to whatever you feel is best to articulate what you found.}.}
+  \label{tab:exp2_gen}
+  \begin{tabular}{lcc}
+    \toprule
+    \textbf{Condition} & \textbf{Val Answer Accuracy} & \textbf{Notes} \\
+    \midrule
+    \todo{Condition A}  & \todo{X.XXX}  & \\
+    \todo{Condition B}  & \todo{X.XXX}  & \\
+    \bottomrule
+  \end{tabular}
+\end{table}
+
+\subsection{Analysis}
+
+\subsubsection{Analysis — Task 1 Experiment (CLIP)}
+\todo{Interpret results from Table~\ref{tab:exp2_cls}. Why did certain conditions outperform others?}
+
+\subsubsection{Analysis — Task 2 Experiment (CLIP)}
+\todo{Interpret results from Table~\ref{tab:exp2_gen}.}
+
+\subsubsection{End-to-End vs.\ CLIP Feature Models}
+
+\todo{
+  Compare the best end-to-end models (Section 1) against the best CLIP
+  feature models (Section 2) on both tasks. Which approach performs
+  better? Provide a hypothesis for why. Discuss trade-offs in terms of
+  model complexity, training time, and final performance.
+}
+
+
+% ════════════════════════════════════════════════════════════
+\section{Data Efficiency (CSCI 5922 Only)}
+% Rubric: 10 points
+% 4922 students: leave this section blank — it will not be graded.
+% ════════════════════════════════════════════════════════════
+
+\subsection{Hypothesis}
+
+\todo{
+  Before retraining the models, provide a hypothesis on the influence of the extra
+training samples. Will the from-scratch model benefit more from the additional
+data than the CLIP features model? Why or why not?
+}
+
+\subsection{Methods}
+
+\todo{
+  List all fixed hyperparameters used for both models (learning rate,
+  batch size, number of epochs, optimizer, scheduler, etc.). Explain how
+  you constructed the 75\% training split (e.g., random seed, any
+  stratification). Note that hyperparameters are frozen from the
+  competition models.
+}
+
+\subsection{Results}
+
+\todo{This is just a placeholder table. Please adjust the results section to whatever you feel is best to articulate your findings.}
+
+\begin{table}[h]
+  \centering
+  \caption{Validation accuracy across training data fractions for both binary
+           classification architectures.}
+  \label{tab:data_eff}
+  \begin{tabular}{llccc}
+    \toprule
+    \textbf{Model} & \textbf{Task} & \textbf{50\% (baseline)} & \textbf{75\%} & \textbf{100\%} \\
+    \midrule
+    End-to-End  & Classification & \todo{XX.X} & \todo{XX.X} & \todo{XX.X} \\
+    CLIP-based  & Classification & \todo{XX.X} & \todo{XX.X} & \todo{XX.X} \\
+    \bottomrule
+  \end{tabular}
+\end{table}
+
+\subsection{Analysis}
+
+\todo{
+  Analyze the trends in Table~\ref{tab:data_eff}. Does performance
+  increase monotonically with more data? Is the improvement larger for
+  one model? Why? Then explicitly revisit your hypothesis from
+  Section~\ref{sec:hypothesis}: was it supported, partially supported,
+  or refuted? Discuss what this reveals about data efficiency in the
+  context of pre-trained vs.\ from-scratch models.
+}
+
+\label{sec:hypothesis}
+
+
+% ════════════════════════════════════════════════════════════
+\clearpage
+\appendix
+\section*{Appendix: Code}
+% ════════════════════════════════════════════════════════════
+\todo{Please add the code used for this lab here. An example is provided below.}
+
+\begin{verbatim}
+// This is a simple code snippet
+int main() {
+    printf("Hello, world!");
+    return 0;
+}
+\end{verbatim}
+
+\end{document}
