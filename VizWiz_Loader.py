@@ -4,7 +4,9 @@ from PIL import Image
 
 import os
 import json
-from typing import Callable
+from typing import Callable, Dict, List, Sequence
+
+from torch.utils.data import DataLoader
 
 class VizWizLoader(torch.utils.data.Dataset):
     def __init__(self, strFolder: str, strAnnotationPath: str, fDataPercentage: float = 1.0,
@@ -53,3 +55,88 @@ class VizWizLoader(torch.utils.data.Dataset):
             return tX, self.vecAnnos[idx]["question"]
         else:
             return tX, self.vecAnnos[idx]["question"], self.vecAnnos[idx]["answerable"], self.vecAnnos[idx]["answers"]
+
+
+def build_simple_tokenizer(question_texts: Sequence[str]) -> Callable[[str, int], List[int]]:
+    """Builds a whitespace tokenizer with fixed ids: 0=PAD, 1=UNK."""
+    vocab: Dict[str, int] = {"<PAD>": 0, "<UNK>": 1}
+
+    for text in question_texts:
+        for token in str(text).lower().strip().split():
+            if token and token not in vocab:
+                vocab[token] = len(vocab)
+
+    def tokenize(text: str, max_len: int) -> List[int]:
+        tokens = str(text).lower().strip().split()
+        ids = [vocab.get(token, 1) for token in tokens][:max_len]
+        if len(ids) < max_len:
+            ids.extend([0] * (max_len - len(ids)))
+        return ids
+
+    return tokenize
+
+
+class VizWizDatasetWithText(torch.utils.data.Dataset):
+    """Wraps VizWiz samples and adds fixed-length tokenized questions."""
+
+    def __init__(
+        self,
+        base_dataset: VizWizLoader,
+        text_tokenizer: Callable[[str, int], List[int]],
+        max_len: int = 32,
+    ) -> None:
+        self.base_dataset = base_dataset
+        self.text_tokenizer = text_tokenizer
+        self.max_len = max_len
+
+    def __len__(self) -> int:
+        return len(self.base_dataset)
+
+    def __getitem__(self, idx: int) -> Dict[str, object]:
+        sample = self.base_dataset[idx]
+
+        if len(sample) == 2:
+            image, question_text = sample
+            question_text = str(question_text).lower().strip()
+            question_ids = self.text_tokenizer(question_text, self.max_len)
+            return {
+                "image": image,
+                "question_ids": question_ids,
+            }
+
+        image, question_text, answerable_label, answers_list = sample
+        question_text = str(question_text).lower().strip()
+        question_ids = self.text_tokenizer(question_text, self.max_len)
+
+        canonical_answer = ""
+        for answer_item in answers_list:
+            if isinstance(answer_item, dict):
+                candidate = str(answer_item.get("answer", "")).lower().strip()
+            else:
+                candidate = str(answer_item).lower().strip()
+            if candidate:
+                canonical_answer = candidate
+                break
+
+        return {
+            "image": image,
+            "question_ids": question_ids,
+            "answerable": int(answerable_label),
+            "target_answer": canonical_answer,
+        }
+
+
+if __name__ == "__main__":
+    train_images_folder = "path/to/VizWiz/train/"
+    train_annotations_path = "path/to/Annotations/train.json"
+
+    if os.path.isdir(train_images_folder) and os.path.isfile(train_annotations_path):
+        train_base = VizWizLoader(strFolder=train_images_folder, strAnnotationPath=train_annotations_path)
+        train_questions = [str(train_base[i][1]).lower().strip() for i in range(len(train_base))]
+        tokenizer = build_simple_tokenizer(train_questions)
+        train_dataset = VizWizDatasetWithText(
+            base_dataset=train_base,
+            text_tokenizer=tokenizer,
+            max_len=32,
+        )
+        train_loader = DataLoader(train_dataset, batch_size=32, shuffle=True, num_workers=0)
